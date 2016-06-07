@@ -1,6 +1,6 @@
 ## 1.安装  
 ```
-composer require webuploader/yii2-webuploader
+composer require ran2016/yii2-webuploader
 ```
 ## 2.使用  
 >直接使用
