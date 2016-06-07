@@ -1,5 +1,5 @@
 {
-    "name": "ran/yii2-webuploader",
+    "name": "ran2016/yii2-webuploader",
     "description": "yii2-webuploader",
     "require": {
         "php": ">=5.4.0"
