@@ -1,6 +1,7 @@
 {
-    "name": "ran2016/yii2-webuploader",
+    "name": "life2016/yii2-webuploader",
     "description": "yii2-webuploader",
+    "minimum-stability": "stable",
     "require": {
         "php": ">=5.4.0"
     },
