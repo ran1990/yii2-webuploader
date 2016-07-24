@@ -13,14 +13,14 @@ use yii\helpers\Url;
 use yii\widgets\InputWidget;
 use services\models\UpFileData;
 
-class WebBatchUploader extends InputWidget{
+class MultipeWebuploader extends InputWidget{
     //默认配置
     protected $_options;
     public $server;
     public function init()
     {
         parent::init();
-        $this->options['number'] = isset($this->options['number']) ? $this->options['number'] : \Yii::$app->params['imageMaxNumber'];
+        $this->options['number'] = isset($this->options['number']) ? $this->options['number'] : \Yii::$app->params['fileNumber'];
         $this->options['boxId'] = isset($this->options['boxId']) ? $this->options['boxId'] : 'picker';
         $this->options['innerHTML'] = isset($this->options['innerHTML']) ? $this->options['innerHTML'] :'<button class="btn btn-primary">选择文件</button>';
         $this->options['previewWidth'] = isset($this->options['previewWidth']) ? $this->options['previewWidth'] : '250';
