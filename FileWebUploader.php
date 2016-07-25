@@ -1,5 +1,5 @@
 <?php
-/**上传多个
+/**上传多个文件
  * author: ran.ran
  * Date: 2015/12/9
  * Time: 10:11
@@ -12,15 +12,17 @@ use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\widgets\InputWidget;
 use services\models\UpFileData;
-
-class MultipeWebuploader extends InputWidget{
+use Yii;
+class FileWebUploader extends InputWidget{
+    
     //默认配置
     protected $_options;
     public $server;
     public function init()
     {
         parent::init();
-        $this->options['number'] = isset($this->options['number']) ? $this->options['number'] : \Yii::$app->params['MaxNumber'];
+        $this->options['type'] = isset($this->options['type']) ? $this->options['type'] : 'file';
+        $this->options['number'] = isset($this->options['number']) ? $this->options['number'] : Yii::$app->params['MaxNumber'];
         $this->options['boxId'] = isset($this->options['boxId']) ? $this->options['boxId'] : 'picker';
         $this->options['innerHTML'] = isset($this->options['innerHTML']) ? $this->options['innerHTML'] :'<button class="btn btn-primary">选择文件</button>';
         $this->options['previewWidth'] = isset($this->options['previewWidth']) ? $this->options['previewWidth'] : '250';
@@ -40,7 +42,7 @@ class MultipeWebuploader extends InputWidget{
             $valueArr = explode(',', $value);
             foreach ($valueArr as $key=>$val) {
                 $img_url = UpFileData::showImage($val);
-                $img = strpos($img_url, 'http:') === false ? (\Yii::getAlias('@static') . '/' . $img_url) : $img_url;
+                $img = strpos($img_url, 'http:') === false ? (Yii::getAlias('@static') . '/' . $img_url) : $img_url;
                 $li_items ='';
                 $li_items .= '<li id="WU_FILE_'.$key.'">';
                 $li_items .='<p class="title">1.jpg</p>';
@@ -66,10 +68,15 @@ class MultipeWebuploader extends InputWidget{
      */
     private function registerClientJs()
     {
+        //获取配置文件中文件类型
+        $exts = $this->options['type'] == 'file' ? Yii::$app->params['file_exts'] :  Yii::$app->params['video_exts'];
+        
+        $exts = implode(',', $exts);
+        
         WebuploaderAsset::register($this->view);
-        $web = \Yii::getAlias('@static');
+        $web = Yii::getAlias('@static');
         $server = $this->server ?: Url::to(['webupload']);
-        $swfPath = str_replace('\\', '/', \Yii::getAlias('@common/widgets/swf'));
+        $swfPath = str_replace('\\', '/', Yii::getAlias('@common/widgets/swf'));
         $this->view->registerJs(<<<JS
         var uploader = WebUploader.create({
         auto: true,
@@ -89,17 +96,14 @@ class MultipeWebuploader extends InputWidget{
         },
 
         accept: {
-            title: 'Images',
-            extensions: 'gif,jpg,jpeg,bmp,png',
-            mimeTypes: 'image/*'
+            title: 'Files',
+            extensions: '{$exts}'
         }
-        // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
-        //resize: false
     });
     uploader.on('beforeFileQueued',function(file){
         var size = $('#uploader ul li').size();
         if(size >={$this->options['number']}) {
-           alert('上传图片不能超过（{$this->options['number']}）张上限');
+           alert('上传不能超过最大值（{$this->options['number']}）');
            return false;
         }
     });
@@ -140,15 +144,14 @@ class MultipeWebuploader extends InputWidget{
     
    uploader.on('error',function(type){
        if(type == 'Q_TYPE_DENIED') {
-          alert('上传图片支持jpg、jpeg，gif，png，bmp格式');
+          alert('上传类型支持{$exts}格式');
           return false;
        }
     });
     
     function addFile(file,data) {
-       var li = $( '<li id="' + file.id + '">' +
+       var li = $( '<li id="' + file.id + '" style="height:40px;">' +
                 '<p class="title">' + file.name + '</p>' +
-                '<p class="imgWrap"><img src="{$web}'+data.url+'" width="{$this->options['previewWidth']}" height="{$this->options['previewHeight']}"/></p>'+
                 '<p class="progress"><span></span></p>' +
                 '</li>');
         var btns = $('<div class="file-panel"><span data-id="'+data.id+'" class="removeItems cancel">删除</span></div>').appendTo(li);
