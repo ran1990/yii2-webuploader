@@ -73,6 +73,8 @@ class FileWebUploader extends InputWidget{
         
         $exts = implode(',', $exts);
         
+        $maxSize = $this->options['type'] =='file' ? Yii::$app->params['fileMaxSize'] : Yii::$app->params['videoMaxSize'];
+      
         WebuploaderAsset::register($this->view);
         $web = Yii::getAlias('@static');
         $server = $this->server ?: Url::to(['webupload']);
@@ -94,12 +96,23 @@ class FileWebUploader extends InputWidget{
             //innerHTML:'{$this->options['innerHTML']}'
             multiple:false,
         },
-
+        chunked:true,
+        chunkSize:3072000,
+        fileSingleSizeLimit:{$maxSize},
         accept: {
             title: 'Files',
             extensions: '{$exts}'
         }
     });
+    
+    uploader.onError = function( code ) {
+        if(code == 'F_EXCEED_SIZE') {
+           alert( '上传文件过大，请重新选择');
+           return false;
+        }
+
+    };
+    
     uploader.on('beforeFileQueued',function(file){
         var size = $('#uploader ul li').size();
         if(size >={$this->options['number']}) {

@@ -52,6 +52,9 @@ class Webuploader extends InputWidget{
     {
         WebuploaderAsset::register($this->view);
         $web = \Yii::getAlias('@static');
+        
+        $maxSize = \Yii::$app->params['imageMaxSize'];
+        
         $server = $this->server ?: Url::to(['webupload']);
         $swfPath = str_replace('\\', '/', \Yii::getAlias('@common/widgets/swf'));
         $this->view->registerJs(<<<JS
@@ -71,7 +74,9 @@ class Webuploader extends InputWidget{
             //innerHTML:'{$this->options['innerHTML']}'
             multiple:false,
         },
-
+        chunked:true,
+        chunkSize:3072000,
+        fileSingleSizeLimit:{$maxSize},
         accept: {
             title: 'Images',
             extensions: 'gif,jpg,jpeg,bmp,png',
@@ -80,6 +85,13 @@ class Webuploader extends InputWidget{
         // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
         //resize: false
     });
+    uploader.onError = function( code ) {
+        if(code == 'F_EXCEED_SIZE') {
+           alert( '上传文件过大，请重新选择');
+           return false;
+        }
+
+    };
     uploader.on( 'uploadProgress', function( file, percentage ) {
         var li = $( '#'+file.id ),
             percent = li.find('.progress .progress-bar');
