@@ -96,9 +96,9 @@ class FileWebUploader extends InputWidget{
             //innerHTML:'{$this->options['innerHTML']}'
             multiple:false,
         },
-        chunked:true,
-        chunkSize:3072000,
-        fileSingleSizeLimit:{$maxSize},
+        chunked:true,// [默认值：false] 是否要分片处理大文件上传。
+        chunkSize:3072000,//[默认值：5242880] 如果要分片，分多大一片？ 默认大小为5M.
+        fileSingleSizeLimit:{$maxSize},//验证单个文件大小是否超出限制, 超出则不允许加入队列。
         accept: {
             title: 'Files',
             extensions: '{$exts}'

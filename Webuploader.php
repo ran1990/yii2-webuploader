@@ -74,9 +74,10 @@ class Webuploader extends InputWidget{
             //innerHTML:'{$this->options['innerHTML']}'
             multiple:false,
         },
-        chunked:true,
-        chunkSize:3072000,
-        fileSingleSizeLimit:{$maxSize},
+        compress:false,//配置压缩的图片的选项。如果此选项为false, 则图片在上传前不进行压缩。
+        chunked:true,// [默认值：false] 是否要分片处理大文件上传。
+        chunkSize:3072000,//[默认值：5242880] 如果要分片，分多大一片？ 默认大小为5M.
+        fileSingleSizeLimit:{$maxSize},//验证单个文件大小是否超出限制, 超出则不允许加入队列。
         accept: {
             title: 'Images',
             extensions: 'gif,jpg,jpeg,bmp,png',
