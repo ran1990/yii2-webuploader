@@ -42,12 +42,18 @@ class MultipeWebuploader extends InputWidget{
                 $img_url = UpFileData::showImage($val);
                 $img = strpos($img_url, 'http:') === false ? (\Yii::getAlias('@static') . '/' . $img_url) : $img_url;
                 $li_items ='';
-                $li_items .= '<li id="WU_FILE_'.$key.'">';
+                $li_items .= '<li dataid="'.$val.'" id="WU_FILE_'.$key.'">';
                 $li_items .='<p class="title">1.jpg</p>';
                 $li_items .='<p class="imgWrap">';
                 $li_items .='<img src="'.$img.'" width="'.$this->options['previewWidth'].'" height="'.$this->options['previewHeight'].'"></p>';
                 $li_items .='<p class="progress"><span></span></p>';
-                $li_items .='<div class="file-panel"><span data-id="'.$val.'" class="removeItems cancel">删除</span></div></li>';
+                $li_items .='<div class="file-panel"><span data-id="'.$val.'" class="removeItems cancel">删除</span>';
+                //$li_items .='<span data-id="'.$val.'" class="rotateRight">向右旋转</span>';
+                //$li_items .='<span data-id="'.$val.'" class="rotateLeft">向左旋转</span>';
+                $li_items .='<span data-id="'.$val.'" class="moveRight">向右移动</span>';
+                $li_items .='<span data-id="'.$val.'" class="moveLeft">向左移动</span>';
+                $li_items .='</div></li>';
+                        
                 
                 $li_list .=$li_items;
             }
@@ -160,26 +166,46 @@ class MultipeWebuploader extends InputWidget{
     });
     
     function addFile(file,data) {
-       var li = $( '<li id="' + file.id + '">' +
+       var li = $( '<li dataid="'+data.id+'" id="' + file.id + '">' +
                 '<p class="title">' + file.name + '</p>' +
                 '<p class="imgWrap"><img src="{$web}'+data.url+'" width="{$this->options['previewWidth']}" height="{$this->options['previewHeight']}"/></p>'+
                 '<p class="progress"><span></span></p>' +
                 '</li>');
-        var btns = $('<div class="file-panel"><span data-id="'+data.id+'" class="removeItems cancel">删除</span></div>').appendTo(li);
+                
+        var li_items = '<span data-id="'+data.id+'" class="removeItems cancel">删除</span>';
+            //li_items +='<span data-id="'+data.id+'" class="rotateRight">向右旋转</span>';
+            //li_items +='<span data-id="'+data.id+'" class="rotateLeft">向左旋转</span>';
+            li_items +='<span data-id="'+data.id+'" class="moveRight">向右移动</span>';
+            li_items +='<span data-id="'+data.id+'" class="moveLeft">向左移动</span>'; 
+        var btns = $('<div class="file-panel">'+li_items+'</div>').appendTo(li);
         $('.filelist').append(li); 
     }
-                    
+    
+    //移动、删除操作后，重新排序隐藏域值顺序
+    function updateImageId(){
+        var idStr = $("#uploader li").map(function(){return $(this).attr("dataid")}).get();
+        $("#{$this->options['id']}").val(idStr);
+    }
+            
     $(function(){
          //删除
          $('body').delegate('.removeItems','click',function(){
-             var data_id = $(this).attr('data-id');
-             var temparr = ($( '#{$this->options['id']}' ).val()).split(',');
-             if($.inArray(data_id,temparr) > -1) {
-                temparr.remove(data_id);
-                $( '#{$this->options['id']}' ).val(temparr.toString());
-             }
-             $(this).parent().parent().find('li').off().end().remove();    
+             $(this).parent().parent().find('li').off().end().remove();  
+             updateImageId();
          });
+            
+        $('body').on("click", ".moveLeft", function(){
+            var currentItem = $(this).closest("li");
+            var prevItem = currentItem.prev("li");
+            prevItem.size()>0&&currentItem.insertBefore(prevItem);
+            updateImageId();
+        });
+        $('body').on("click", ".moveRight", function(){
+            var currentItem = $(this).closest("li");
+            var nextItem = currentItem.next("li");
+            nextItem.size()>0&&currentItem.insertAfter(nextItem);
+            updateImageId();
+        });
          //移上去显示
          $('body').delegate('#uploader .filelist li','mouseenter',function(){
               $(this).find('.file-panel').stop().animate({height: 30});     

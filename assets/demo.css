@@ -247,25 +247,40 @@
     cursor: pointer;
 }
 
-#uploader .filelist div.file-panel span.rotateLeft {
+#uploader .filelist div.file-panel span.moveLeft {
     background-position: 0 -24px;
 }
-#uploader .filelist div.file-panel span.rotateLeft:hover {
+#uploader .filelist div.file-panel span.moveLeft:hover {
     background-position: 0 0;
 }
 
-#uploader .filelist div.file-panel span.rotateRight {
+#uploader .filelist div.file-panel span.moveRight {
     background-position: -24px -24px;
 }
-#uploader .filelist div.file-panel span.rotateRight:hover {
+#uploader .filelist div.file-panel span.moveRight:hover {
     background-position: -24px 0;
 }
 
-#uploader .filelist div.file-panel span.cancel {
+
+#uploader .filelist div.file-panel span.rotateLeft {
     background-position: -48px -24px;
 }
-#uploader .filelist div.file-panel span.cancel:hover {
+#uploader .filelist div.file-panel span.rotateLeft:hover {
     background-position: -48px 0;
+}
+
+#uploader .filelist div.file-panel span.rotateRight {
+    background-position: -72px -24px;
+}
+#uploader .filelist div.file-panel span.rotateRight:hover {
+    background-position: -72px 0;
+}
+
+#uploader .filelist div.file-panel span.cancel {
+    background-position: -96px -24px;
+}
+#uploader .filelist div.file-panel span.cancel:hover {
+    background-position: -96px 0;
 }
 
 #uploader .statusBar {
