@@ -24,6 +24,7 @@ class Webuploader extends InputWidget{
         $this->options['innerHTML'] = isset($this->options['innerHTML']) ? $this->options['innerHTML'] :'<button class="btn btn-primary">选择文件</button>';
         $this->options['previewWidth'] = isset($this->options['previewWidth']) ? $this->options['previewWidth'] : '250';
         $this->options['previewHeight'] = isset($this->options['previewHeight']) ? $this->options['previewHeight'] : '150';
+        $this->options['multiple'] = isset($this->options['multiple']) ? $this->options['multiple'] : 1;
     }
     public function run()
     {
@@ -50,13 +51,17 @@ class Webuploader extends InputWidget{
      */
     private function registerClientJs()
     {
-        WebuploaderAsset::register($this->view);
         $web = \Yii::getAlias('@static');
         
         $maxSize = \Yii::$app->params['imageMaxSize'];
         
         $server = $this->server ?: Url::to(['webupload']);
         $swfPath = str_replace('\\', '/', \Yii::getAlias('@common/widgets/swf'));
+        
+        if($this->options['multiple'] == 1) {
+            
+        WebuploaderAsset::register($this->view);
+
         $this->view->registerJs(<<<JS
         var uploader = WebUploader.create({
         auto: true,
@@ -127,9 +132,22 @@ class Webuploader extends InputWidget{
           return false;
        }
     });
-        
+   
     
 JS
         );
+      }else {
+        $this->view->registerJs(<<<HEADJS
+        var inputId = '{$this->options['id']}';
+        var swfPath = '{$swfPath}';
+        var serverUrl = '{$server}';
+        var boxId = '{$this->options['boxId']}';
+        var maxSize  = '"{$maxSize}';
+        var previewWidth = '{$this->options['previewWidth']}';
+        var previewHeight = '{$this->options['previewHeight']}';
+        var webUrl = '{$web}';
+HEADJS
+          ,1);
+      }
     }
 } 
