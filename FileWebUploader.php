@@ -44,10 +44,8 @@ class FileWebUploader extends InputWidget{
                 $img_url = UpFileData::showImage($val);
                 $img = strpos($img_url, 'http:') === false ? (Yii::getAlias('@static') . '/' . $img_url) : $img_url;
                 $li_items ='';
-                $li_items .= '<li id="WU_FILE_'.$key.'">';
-                $li_items .='<p class="title">1.jpg</p>';
-                $li_items .='<p class="imgWrap">';
-                $li_items .='<img src="'.$img.'" width="'.$this->options['previewWidth'].'" height="'.$this->options['previewHeight'].'"></p>';
+                $li_items .= '<li id="WU_FILE_'.$key.'" style="height:40px;" >';
+                $li_items .='<p class="title">1.csv</p>';
                 $li_items .='<p class="progress"><span></span></p>';
                 $li_items .='<div class="file-panel"><span data-id="'.$val.'" class="removeItems cancel">删除</span></div></li>';
                 
