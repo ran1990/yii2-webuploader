@@ -1,6 +1,6 @@
-function initUpload(){
-	var size = $("#"+boxId+" input[name='file']").size();
-	if(size >0) return false;
+function initUploadImage(index){
+	//加载之前移除之前已有的上传节点
+	$("#"+eval('boxId'+index)).find('div').remove();
 		 var uploader = WebUploader.create({
 		        auto: true,
 		        fileVal: 'upfile',
@@ -13,18 +13,18 @@ function initUpload(){
 		        // 选择文件的按钮。可选。
 		        // 内部根据当前运行是创建，可能是input元素，也可能是flash.
 		        pick: {
-		            id:'#'+boxId,
+		            id:'#'+eval('boxId'+index),
 		            //innerHTML:'{$this->options['innerHTML']}'
 		            multiple:false,
 		        },
 		        compress:false,//配置压缩的图片的选项。如果此选项为false, 则图片在上传前不进行压缩。
 		        chunked:true,// [默认值：false] 是否要分片处理大文件上传。
 		        chunkSize:3072000,//[默认值：5242880] 如果要分片，分多大一片？ 默认大小为5M.
-		        fileSingleSizeLimit:maxSize,//验证单个文件大小是否超出限制, 超出则不允许加入队列。
+		        fileSingleSizeLimit:eval('maxSize'+index),//验证单个文件大小是否超出限制, 超出则不允许加入队列。
 		        accept: {
 		            title: 'Images',
 		            extensions: 'gif,jpg,jpeg,bmp,png',
-		            mimeTypes: 'image/*'
+		            mimeTypes: 'image/jpg,image/jpeg,image/png'
 		        }
 		        // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
 		        //resize: false
@@ -56,9 +56,9 @@ function initUpload(){
 		    uploader.on( 'uploadSuccess', function( file, data ) {
 		       if(data.flag) {
 		            $( '#'+file.id ).find('p.state').text('上传成功').fadeOut();
-		            $( '#'+boxId+' .webuploader-pick' ).html('<img src="'+webUrl+''+data.url+'" width="'+previewWidth+'" height="'+previewHeight+'"/>');
-		            $( '#'+inputId ).val(data.id);
-		            $( '#'+boxId+' .webuploader-pick' ).siblings('div').width(previewWidth).height(previewHeight);
+		            $( '#'+eval('boxId'+index)+' .webuploader-pick' ).html('<img src="'+webUrl+''+data.url+'" width="'+previewWidth+'" height="'+previewHeight+'"/>');
+		            $( '#'+eval('inputId'+index) ).val(data.id);
+		            $( '#'+eval('boxId'+index)+' .webuploader-pick' ).siblings('div').width(previewWidth).height(previewHeight);
 		       } else {
 		            alert(data.state);
 		            return false;
@@ -70,5 +70,12 @@ function initUpload(){
 		          return false;
 		       }
 		    });
-		    uploader = null;   
-}
+		    uploader = null; 
+		    //移除重复加载的元素节点
+	    	var flag = ($("body #"+eval('boxId'+index)).children("div:first-child").children("button").hasClass("btn btn-primary"));
+		    if(!flag){
+		    	$("#"+eval('boxId'+index)).children("div:first-child").append('<button class="btn btn-primary">选择文件</button>');
+
+		    }
+	}
+

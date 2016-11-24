@@ -103,7 +103,7 @@ class MultipeWebuploader extends InputWidget{
         accept: {
             title: 'Images',
             extensions: 'gif,jpg,jpeg,bmp,png',
-            mimeTypes: 'image/*'
+            mimeTypes: 'image/jpg,image/jpeg,image/png'
         }
         // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
         //resize: false
