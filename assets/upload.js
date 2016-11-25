@@ -1,6 +1,8 @@
 function initUploadImage(index){
 	//加载之前移除之前已有的上传节点
+	var imageUrl = $("#"+eval('boxId'+index)).children("div:first-child").html();
 	$("#"+eval('boxId'+index)).find('div').remove();
+
 		 var uploader = WebUploader.create({
 		        auto: true,
 		        fileVal: 'upfile',
@@ -72,10 +74,10 @@ function initUploadImage(index){
 		    });
 		    uploader = null; 
 		    //移除重复加载的元素节点
-	    	var flag = ($("body #"+eval('boxId'+index)).children("div:first-child").children("button").hasClass("btn btn-primary"));
-		    if(!flag){
-		    	$("#"+eval('boxId'+index)).children("div:first-child").append('<button class="btn btn-primary">选择文件</button>');
+	    	/*var flag = ($("body #"+eval('boxId'+index)).children("div:first-child").children("button").hasClass("btn btn-primary"));
+		    if(!flag){*/
+		    	$("#"+eval('boxId'+index)).children("div:first-child").append(imageUrl);
 
-		    }
+		    //}
 	}
 
