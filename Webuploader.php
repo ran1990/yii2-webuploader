@@ -61,11 +61,11 @@ class Webuploader extends InputWidget{
         $swfPath = str_replace('\\', '/', \Yii::getAlias('@common/widgets/swf'));
         
         WebuploaderAsset::register($this->view);
-        if ($this->options['multiple'] == 1) {
-            $this->view->registerJs(<<<JS
+        $this->view->registerJs(<<<JS
             initUploadImage({$this->options['multiple']});
 JS
-            );
+        );
+        if ($this->options['multiple'] == 1) {
             $this->view->registerJs(<<<HEADJS
             var previewWidth = '{$this->options['previewWidth']}';
             var previewHeight = '{$this->options['previewHeight']}';
