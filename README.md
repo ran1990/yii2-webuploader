@@ -1,9 +1,15 @@
+##webuploader
+
+	===============================
+![Effect picture 1](https://github.com/ran1990/yii2-webuploader/blob/master/multi_image.png "Effect picture 1")  
+![Effect picture 1](https://github.com/ran1990/yii2-webuploader/blob/master/more_file.png "Effect picture 1")  
+	
 ## 1.安装  
 ```
 composer require life2016/yii2-webuploader
 
 借鉴yiidashi，地址：https://github.com/yidashi/yii2-webuploader
-
+	
 本次改版主要是，支持多张图片上传，图片与文件分开，严格控制图片上传格式，
 需要注意的是：文件中涉及到Yii::$app->params[变量]，请自行前往设置，这里不做说明，贴代码如下：
     // 允许图片上传最大大小字节
@@ -62,12 +68,8 @@ composer require life2016/yii2-webuploader
         'png'
     ],
 	
-	
-	===============================
-![Effect picture 1](https://github.com/ran1990/yii2-webuploader/blob/master/multi_image.png "Effect picture 1")  
-![Effect picture 1](https://github.com/ran1990/yii2-webuploader/blob/master/more_file.png "Effect picture 1")  
-	
 ```
+
 ## 2.使用 
 
 ## 2.1使用FileWebUploader上传文件
